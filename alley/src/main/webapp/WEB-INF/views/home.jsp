@@ -5,7 +5,7 @@
 <%@ include file="./includes/header.jsp"%>
 
 <!-- carousel -->
-<div id="carouselExampleIndicators" class="carousel slide"
+<div id="carouselExampleIndicators" class="carousel slide bg-dark"
 	data-bs-ride="carousel">
 	<div class="carousel-indicators">
 		<button type="button" data-bs-target="#carouselExampleIndicators"
