@@ -31,6 +31,12 @@
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon"
 	href="/resources/assets/favicon.ico" />
+<style>
+.a { font-family: Geogia;
+	font-style: normal;
+	font-weight: 800;
+	font-size: x-large; }
+</style>	
 </head>
 <body>
 	<!-- navbar -->
@@ -42,7 +48,8 @@
 				class="d-inline-block align-text-top">
 			</a>
 			<div>
-				<a class="navbar-brand" href="/">먹보들의<br>거리<br>리뷰
+				<a class="navbar-brand" style="font-family: Geogia;
+				font-style: oblique;" href="/">먹보들의<br>거리<br>리뷰
 				</a>
 			</div>
 			<div class="collapse navbar-collapse" id="navbarNav">
