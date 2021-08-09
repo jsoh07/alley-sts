@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import kr.co.domain.Comm_Criteria;
 import kr.co.domain.Comm_ReplyVO;
+import kr.co.domain.ReplyPageDTO;
 
 public interface Comm_ReplyService {
 	
@@ -20,4 +21,6 @@ public interface Comm_ReplyService {
 	public List<Comm_ReplyVO> getList(@Param("cri") Comm_Criteria cri, 
 			@Param("bno") Long bno);
 	// 페이지 정보와 게시물 번호를 전달
+	
+	public ReplyPageDTO getListPage(Comm_Criteria cri, Long bno);
 }

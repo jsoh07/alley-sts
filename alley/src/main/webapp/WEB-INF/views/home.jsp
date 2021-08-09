@@ -61,7 +61,7 @@
 						src="https://search.pstatic.net/common/?autoRotate=true&quality=95&type=w750&src=http%3A%2F%2Fblogfiles.naver
 						.net%2FMjAyMTAzMjVfMjY5%2FMDAxNjE2NjY0NDkxNjUz.53nb4eZ2wfu6FkgD1Ds2bMUOeAkC5PrVJQpRbVuKwggg
 						.aNqWbv_bh8Z732NzVB-tO76IKT6AneltSkrO6BUxh2Eg.JPEG.dear-mybride%2FIMG_3347.JPG" 
-						style="height: 200px;" "alt="첫번째 식당" />
+						style="height: 200px;" alt="첫번째 식당" />
 					<!-- 식당 정보 -->
 					<div class="card-body p-4">
 						<div class="text-center">

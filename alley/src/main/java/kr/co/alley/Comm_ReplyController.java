@@ -2,7 +2,6 @@ package kr.co.alley;
 
 import java.util.List;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.domain.Comm_Criteria;
 import kr.co.domain.Comm_ReplyVO;
+import kr.co.domain.ReplyPageDTO;
 import kr.co.service.Comm_ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -48,16 +48,16 @@ public class Comm_ReplyController {
 
 	   }
 	   
-	   @GetMapping(value="/pages/{bno}/{page}",// 덧글에 대한 페이징
-			   produces = { MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE })
-	   public ResponseEntity<List<Comm_ReplyVO>> getList(@PathVariable("page") int page, 
+	   @GetMapping(value = "/pages/{bno}/{page}",// 덧글에 대한 페이징
+			   produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	   public ResponseEntity<ReplyPageDTO> getList(@PathVariable("page") int page, 
 			   @PathVariable("bno") Long bno){
 		  // @PathVariable : url 로 넘겨받은 값 이용.
 		   log.info("getList..");
 		   Comm_Criteria cri = new Comm_Criteria(page, 10);
 		   log.info(cri);
 		   
-		   return new ResponseEntity<>(crs.getList(cri,  bno), HttpStatus.OK);
+		   return new ResponseEntity<>(crs.getListPage(cri, bno), HttpStatus.OK);
 		   // T<List<ReplyVO>> t = new T<>();
 		   // 댓글 목록을 출력하고, 정상 처리 상태를 리턴.
 	   }

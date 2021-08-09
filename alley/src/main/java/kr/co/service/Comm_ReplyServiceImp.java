@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.domain.Comm_Criteria;
 import kr.co.domain.Comm_ReplyVO;
+import kr.co.domain.ReplyPageDTO;
 import kr.co.mapper.Comm_ReplyMapper;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -51,6 +52,12 @@ public class Comm_ReplyServiceImp implements Comm_ReplyService {
 	public List<Comm_ReplyVO> getList(Comm_Criteria cri, Long bno) {
 		log.info("get reply list" + bno);
 		return crm.getListWithPaging(cri, bno);
+	}
+
+	@Override
+	public ReplyPageDTO getListPage(Comm_Criteria cri, Long bno) {
+		return new ReplyPageDTO(crm.getCountByBno(bno),
+			crm.getListWithPaging(cri, bno));
 	}
 
 }

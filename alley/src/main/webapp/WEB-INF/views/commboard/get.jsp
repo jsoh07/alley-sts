@@ -219,7 +219,15 @@
 	    		  bno : bnoValue,
 	    		  page: page || 1
 	    	  },
-		 	function(list) {
+		 	function(replyCnt,list) {
+	    		  console.log("replyCnt : " + replyCnt);
+	    		  if(page == -1){
+	    			  pageNum = Math.ceil(replyCnt/10.0);
+	    			  console.log("page: " + pageNum);
+	    			  showList(pageNum);
+	    			  
+	    			  return;
+	    		  }
 	    		var str = "";
 	    		if (list == null || list.length ==0) {
 	    		  replyUL.html("");
@@ -239,8 +247,57 @@
 	    			str += "</p></div></li>";
 	    		}
 				replyUL.html(str);
+				showReplyPage(replyCnt);
 			});
 		}
 	showList(1);
+	
+	/* 댓글 페이징 시작 */
+		var pageNum = 1;
+		var replyPageFooter = $(".panel-footer");
+		
+		function showReplyPage(replyCnt){
+			var endNum = Math.ceil(pageNum / 10.0) * 10;
+			var startNum = endNum - 9;
+			var prev = startNum != 1;
+			var next = false;
+			
+			if(endNum * 10 >= replyCnt){
+				endNum = Math.ceil(replyCnt / 10.0);
+			}
+			if(endNum * 10 < replyCnt){
+				next = true;
+			}
+			var str = "<ul class='pagination";
+			str += " justify-content-center'>";
+			if(prev){
+				str += "<li class='page-item'><a ";
+				str += "class='page-link' href='";
+				str += (startNum - 1);
+				str += "'>이전</a></li>";
+			}
+			for(var i = startNum; i <= endNum; i++){
+				var active = pageNum == i? "active" : "";
+				str += "<li class='page-item" + active
+				+"'><a class='page-link' ";
+				str += "href='"+i+"'>"
+				+ i + "</a></li>";
+			}
+			if(next){
+				str += "<li class='page-item'>";
+				str += "<a class='page-link' href='";
+				str += (endNum + 1) + "'>다음</a></li>";
+			}
+			str += "</ul>";
+			console.log(str);
+			replyPageFooter.html(str);
+		}
+		
+		replyPageFooter.on("click","li a", function(e){
+			e.preventDefault();
+			var targetPageNum = $(this).attr("href");
+			pageNum = targetPageNum;
+			showList(pageNum);
+		});
 }); // end document ready
 </script>
