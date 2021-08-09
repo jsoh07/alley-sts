@@ -23,10 +23,19 @@
 
 			<tr>
 				<td><c:out value="${cb.bno }" /></td>
+				
 				<td><a href="${cb.bno }" class="move">
-				 	<c:out value="${cb.title }" /></a></td>
+				 	<c:out value="${cb.title }" />
+				 	<!-- ne : != 같지 않다 -->
+				 	<c:if test="${cb.replyCnt ne 0 }">
+				 		<span style="color:red;">[
+				 		<c:out value="${cb.replyCnt }"/>]</span>
+				 	</c:if></a></td>
+				
 				<td><c:out value="${cb.writer }" /></td>
+				
 				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${cb.regdate }" /></td>
+				
 				<td><fmt:formatDate pattern="yyyy-MM-dd"
 						value="${cb.updateDate }" /></td>
 			</tr>

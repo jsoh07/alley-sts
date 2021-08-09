@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.domain.Comm_Criteria;
 import kr.co.domain.Comm_ReplyVO;
 import kr.co.domain.ReplyPageDTO;
+import kr.co.mapper.Comm_BoardMapper;
 import kr.co.mapper.Comm_ReplyMapper;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -23,10 +25,14 @@ public class Comm_ReplyServiceImp implements Comm_ReplyService {
 	   private Comm_ReplyMapper crm;
 	   // 매퍼를 조작할 수 있도록 멤버 변수를 생성하고,
 	   // 객체를 자동 초기화 하고 있다.
+	@Setter(onMethod_ =@Autowired)
+		private Comm_BoardMapper cbm;
 	
+	@Transactional
 	@Override
 	public int register(Comm_ReplyVO vo) {
 		log.info("register.." + vo);
+		cbm.updateReplyCnt(vo.getBno(), 1);
 		return crm.insert(vo);
 	}
 
@@ -35,10 +41,13 @@ public class Comm_ReplyServiceImp implements Comm_ReplyService {
 		log.info("get.." + rno);
 		return crm.read(rno);
 	}
-
+	
+	@Transactional
 	@Override
 	public int remove(Long rno) {
 		log.info("remove.." + rno);
+		Comm_ReplyVO vo = crm.read(rno);
+		cbm.updateReplyCnt(vo.getBno(), -1);
 		return crm.delete(rno);
 	}
 

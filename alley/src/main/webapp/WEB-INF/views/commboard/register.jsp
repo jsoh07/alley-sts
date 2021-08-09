@@ -36,4 +36,79 @@
 	</div>
 </div>
 
+<!-- 파일 첨부 -->
+<br />
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			
+			<div class="panel-heading"></div>
+			
+			<div class="panel-body">
+				<div class="form-group uploadDiv">
+					파일첨부: <input type="file" name="uploadFile" multiple>
+				</div>
+				
+				<div class="uploadResult">
+					<ul></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+<script>
+$(document).ready(function(e){
+	var formObj=$("form[role='form']");
+	$("button[type='submit']").on("click",function(e){
+		e.preventDefault();
+		console.log("submit clicked");
+	});
+	
+	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+	
+	var maxSize = 5242880;
+	
+	function checkExtension(fileName, fileSize){
+		if(fileSize >= maxSize){
+			alert("파일이 너무 커버렷!");
+			return false;
+		}
+		
+		if(regex.test(fileName)){
+			alert("해당 종류의 파일은 업로드 불가ㅠ");
+			return false;
+		}
+		return true;
+	}
+	
+	$("input[type='file']").change(function(e){
+		var formData = new FormData();
+		var inputFile = $("input[name='uploadFile']");
+		var files = inputFile[0].files;
+		for(var i = 0; i<files.length; i++){
+			if(!checkExtension(files[i].name,
+					files[i].size)){
+				return false;
+			}
+			formData.append("uploadFile", files[i]);
+		}
+		
+		$.ajax({
+			url : '/uploadAjaxAction',
+			processData : false,
+			contentType : false,
+			data : formData,
+			type : 'POST',
+			dataType : 'json',
+			success : function(result){
+				console.log(result);
+				/* showUploadResult(result); */
+			}
+		});		
+	});
+});
+</script>
+
 <%@ include file="../includes/footer.jsp"%>
