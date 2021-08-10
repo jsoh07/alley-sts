@@ -4,28 +4,43 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.domain.Comm_BoardAttachVO;
 import kr.co.domain.Comm_BoardVO;
 import kr.co.domain.Comm_Criteria;
+import kr.co.mapper.Comm_BoardAttachMapper;
 import kr.co.mapper.Comm_BoardMapper;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 
 @Log4j // lombok 로그 이용.
 @Service // 이 클래스가 서비스 계층을 맡는다고 알림.
-@AllArgsConstructor // 모든 매개변수에 대한 생성자 생성.(생성자 여러개 아님)
+//@AllArgsConstructor // 모든 매개변수에 대한 생성자 생성.(생성자 여러개 아님)
 // 매개변수 모두를 초기화 해야 하는 생성자.
 public class Comm_BoardServiceImp implements Comm_BoardService {
 	
 	@Setter(onMethod_ = @Autowired)
 	private Comm_BoardMapper cbm;
-
+	
+	@Setter(onMethod_ = @Autowired)
+	private Comm_BoardAttachMapper cbam;
+	
+	@Transactional
 	@Override
 	public void register(Comm_BoardVO cb) {
 		log.info("register.." + cb); 
 		cbm.insertSelectKey(cb);
+		
+		if(cb.getAttachList() == null || cb.getAttachList().size() <= 0) {
+			return;
+		}
+		
+		cb.getAttachList().forEach(attach -> {
+			attach.setBno(cb.getBno());
+			cbam.insert(attach);
+		});
 	}
 
 	@Override
@@ -56,6 +71,12 @@ public class Comm_BoardServiceImp implements Comm_BoardService {
 	public int getTotal(Comm_Criteria cri) {
 		log.info("get total count");
 		return cbm.getTotalCount(cri);
+	}
+
+	@Override
+	public List<Comm_BoardAttachVO> getAttachList(Long bno) {
+		log.info("get Attach list by bno: " + bno);
+		return cbam.findByBno(bno);
 	}
 
 }

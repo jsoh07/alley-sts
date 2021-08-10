@@ -64,6 +64,33 @@ $(document).ready(function(e){
 	$("button[type='submit']").on("click",function(e){
 		e.preventDefault();
 		console.log("submit clicked");
+		
+		var str="";
+		$(".uploadResult ul li").each(function(i,obj){
+			var jobj=$(obj);
+			console.dir(jobj);
+			console.log("-----------------");
+			console.log(jobj.data("filename"));
+			
+			str+="<input type='hidden' name='attachList[";
+			str+=i+"].fileName' value='"+jobj.data("filename");
+			str+="'>";
+			
+			str+="<input type='hidden' name='attachList[";
+			str+=i+"].uuid' value='"+jobj.data("uuid");
+			str+="'>";
+			
+			str+="<input type='hidden' name='attachList[";
+			str+=i+"].uploadPath' value='"+jobj.data("path");
+			str+="'>";
+			
+			str+="<input type='hidden' name='attachList[";
+			str+=i+"].fileType' value='"+jobj.data("type");
+			str+="'>";
+			
+			
+		});
+		formObj.append(str).submit();
 	});
 	
 	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
@@ -104,9 +131,59 @@ $(document).ready(function(e){
 			dataType : 'json',
 			success : function(result){
 				console.log(result);
-				/* showUploadResult(result); */
+				showUploadResult(result);
 			}
-		});		
+		});
+		
+		function showUploadResult(uploadResultArr){
+			if(!uploadResultArr || uploadResultArr.length == 0){
+				return;
+			}
+			var uploadUL = $(".uploadResult ul");
+			var str = "";
+			
+			$(uploadResultArr).each(function(i,obj){
+				var fileCallPath
+				= encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
+				
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g), "/");
+				
+				str += "<li data-path='";
+				str += obj.uploadPath+"' data-uuid='";
+				str += obj.uuid+"' data-filename='";
+				str += obj.fileName+"' data-type='";
+				str += obj.image+"'><div>";
+				str += "<img src='/resources/img/attach.png' width='20' height='20'>";
+				str += "<span>" + obj.fileName + "</span>";
+				str += "<b data-file='"+fileCallPath;
+				str += "'data-type='file'>[x]</b>";
+				str += "</div></li>";
+				
+			});
+			uploadUL.append(str);
+		}
+		
+		$(".uploadResult").on("click","b",function(e){
+			console.log("delete file");
+			
+			var targetFile = $(this).data("file");
+			var type = $(this).data("type");
+			var targetLi = $(this).closest("li");
+			
+			$.ajax({
+				url : '/deleteFile',
+				data : {
+					fileName : targetFile,
+					type : type
+				},
+				dataType : 'text',
+				type : 'POST',
+				success : function(result){
+					alert(result);
+					targetLi.remove();
+				}
+			})
+		});
 	});
 });
 </script>

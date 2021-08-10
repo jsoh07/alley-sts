@@ -1,5 +1,10 @@
 package kr.co.alley;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,8 +12,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.co.domain.Comm_BoardAttachVO;
 import kr.co.domain.Comm_BoardVO;
 import kr.co.domain.Comm_Criteria;
 import kr.co.domain.PageDTO;
@@ -43,6 +50,10 @@ public class Comm_BoardController {
 		cbs.register(cb);
 		rttr.addFlashAttribute("result", cb.getBno());
 		// 리다이렉트 시키면서 1회용 값을 전달.
+		
+//		if(cb.getAttachList() != null) {
+//			cb.getAttachList().forEach(attach -> log.info(attach));
+//		}
 
 		return "redirect:/commboard/list";
 	}
@@ -91,6 +102,13 @@ public class Comm_BoardController {
 		rttr.addAttribute("keyword", cri.getKeyword());
 
 		return "redirect:/commboard/list";
+	}
+	
+	@GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<Comm_BoardAttachVO>> getAttachList(Long bno){
+		log.info("getAttachList: " + bno);
+		return new ResponseEntity<>(cbs.getAttachList(bno), HttpStatus.OK);
 	}
 
 }

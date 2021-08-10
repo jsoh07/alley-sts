@@ -51,6 +51,21 @@
 	</div>
 </div>
 
+<!-- 첨부파일 시작 -->
+<br/>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">첨부파일</div>
+			<div class="panel-body">
+				<div class="uploadResult">
+					<ul></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 첨부파일 끝 -->
 
 <!-- 댓글 목록 시작 -->
 <br />
@@ -299,5 +314,27 @@
 			pageNum = targetPageNum;
 			showList(pageNum);
 		});
+		
+		//첨부파일 목록
+		(function(){
+			var bno = '<c:out value="${cb.bno}"/>';
+			
+			$.getJSON("/commboard/getAttachList",{bno:bno}, function(arr){
+						console.log(arr);
+						var str="";
+						
+						$(arr).each(function(i,attach){
+							str+="<li data-path='";
+							str+=attach.uploadPath+"' data-uuid='";
+							str+=attach.uuid+"' data-filename='";
+							str+=attach.fileName+"' data-type='";
+							str+=attach.fileType+"'><div>";
+							str+="<img src='/resources/img/attach.png' width='20'>";
+							str+="<span> &nbsp;"+attach.fileName+"</span><br/>";
+							str+="</div></li>";
+						});
+						$(".uploadResult ul").html(str);
+			});
+		})();
 }); // end document ready
 </script>
