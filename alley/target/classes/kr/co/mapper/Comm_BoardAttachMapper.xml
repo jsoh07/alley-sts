@@ -21,5 +21,9 @@
   	
   		select * from comm_attach where bno=#{bno}	
   	</select>
+  	
+  	<delete id="deleteAll">
+  		delete from comm_attach where bno=#{bno}
+  	</delete>
   
   </mapper>

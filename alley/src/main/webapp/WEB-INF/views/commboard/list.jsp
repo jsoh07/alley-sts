@@ -7,6 +7,15 @@
 <!doctype html>
 <%@ include file="../includes/header.jsp"%>
 
+<div class="py-5 bg-pink">
+	<div class="container">
+		<h2 class="m-0 text-center">게시판</h2>
+	</div>
+	<div class="container" style="margin-left:93%;">
+		<button id="regBtn" style="color: green;">글 쓰기</button>
+	</div>	
+</div>
+
 <!-- table -->
 <table class="table">
 	<thead>
@@ -75,7 +84,7 @@
 	</div>
 <!-- 검색 상자 끝 -->
 		
-<div class="card-header py-3" align="right">
+
 
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
@@ -105,8 +114,6 @@
 		<input type="hidden" name="type" value="${pageMaker.cri.type }">
 		<input type="hidden" name="keyword" value="${pageMaker.cri.keyword }">
 	</form>
-	<button id="regBtn" style="color: green;">글 쓰기</button>
-</div>
 
 <div class="modal" tabindex="-1" id="myModal">
 	<div class="modal-dialog">

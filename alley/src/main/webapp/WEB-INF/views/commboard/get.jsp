@@ -336,5 +336,14 @@
 						$(".uploadResult ul").html(str);
 			});
 		})();
+		
+		$(".uploadResult").on("click", "li", function(e){
+			console.log("download file");
+			var liobj = $(this);
+			var path=encodeURIComponent(liobj.data("path")
+					+"/"+liobj.data("uuid")+"_"
+					+liobj.data("filename"));
+			self.location="/download?fileName="+path;	
+		});
 }); // end document ready
 </script>

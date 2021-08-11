@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!-- jstl core 쓸때 태그에 c 로 표시. -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -31,12 +33,16 @@
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon"
 	href="/resources/assets/favicon.ico" />
+
 <style>
-.a { font-family: Geogia;
+.a {
+	font-family: Geogia;
 	font-style: normal;
 	font-weight: 800;
-	font-size: x-large; }
-</style>	
+	font-size: x-large;
+}
+</style>
+
 </head>
 <body>
 	<!-- navbar -->
@@ -48,12 +54,12 @@
 				class="d-inline-block align-text-top">
 			</a>
 			<div>
-				<a class="navbar-brand" style="font-family: Geogia;
-				font-style: oblique;" href="/">먹보들의<br>거리<br>리뷰
+				<a class="navbar-brand"
+					style="font-family: Geogia; font-style: oblique;" href="/">먹보들의<br>거리<br>리뷰
 				</a>
 			</div>
 			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav" style="padding-left: 50%;">
+				<ul class="navbar-nav" style="padding-left: 53%;">
 					<li class="nav-item"><a class="nav-link"
 						href="/commboard/list">게시판</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">최근 본 식당</a></li>
@@ -61,12 +67,12 @@
 			</div>
 
 			<!-- searchbar -->
-			<nav class="navbar navbar-light bg-light" style="padding-right: 2%;">
+			<nav class="navbar navbar-light bg-light" style="padding-right: 10%;">
 				<div class="container-fluid">
 					<form class="d-flex">
 						<input class="form-control me-2" type="search"
 							placeholder="지역 또는 식당을 검색해주세요.." aria-label="Search"
-							style="width: 450px; height: 50px; font-size: 20px;">
+							style="width: 400px; height: 50px; font-size: 20px;">
 						<button class="btn btn-outline-success" type="submit">Search</button>
 					</form>
 				</div>
@@ -79,10 +85,43 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav" style="padding-right: 30%;">
-					<li class="nav-item"><a class="nav-link" href="#">로그인/회원가입</a>
+				<ul class="navbar-nav">
+					<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#"
+						id="navbarDropdownMenuLink" role="button"
+						data-bs-toggle="dropdown" aria-expanded="false" style="padding-right: 20%;"> 마이페이지 <!-- 정상 로그인, 찾기 : Douglas -->
+							<sec:authorize access="isAuthenticated()">
+								<span class="mr-2 d-none d-lg-inline text-gray-600 small">
+									<!-- Douglas McGee --> <sec:authentication
+										property="principal.username" />
+								</span>
+								<!-- <img class="img-profile rounded-circle"
+                        src="/resources/img/undraw_profile.svg"> -->
+							</sec:authorize> <!-- 익명 로그인 --> <sec:authorize access="isAnonymous()">
+								<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"> </i>
+							</sec:authorize>
+
+					</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<li><a class="dropdown-item" href="#">Action</a></li>
+							<li><a class="dropdown-item" href="#">Another action</a></li>
+							<li>
+								<!-- <a class="dropdown-item" href="#">Something else here</a> -->
+								<sec:authorize access="isAuthenticated()">
+									<a class="dropdown-item" href="/customLogout"> <i
+										class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+										Logout
+									</a>
+								</sec:authorize>
+								<sec:authorize access="isAnonymous()">
+									<a class="dropdown-item" href="/customLogin"> <i
+										class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text gray-400">
+									</i>Login<!-- 익명 상태라면 로그인 표시 -->
+									</a>
+								</sec:authorize>
+							</li>
+						</ul>
 					</li>
-					<li class="nav-item"><a class="nav-link" href="#">마이페이지</a></li>
 				</ul>
 			</div>
 		</div>

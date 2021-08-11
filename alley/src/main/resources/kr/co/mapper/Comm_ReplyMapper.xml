@@ -46,4 +46,9 @@
 		select count(bno) from
 		comm_board_reply where bno=#{bno}
 	</select>
+	
+	<delete id="deleteAll">
+		delete from comm_board_reply where bno=#{bno}
+	</delete>
+	
 </mapper>

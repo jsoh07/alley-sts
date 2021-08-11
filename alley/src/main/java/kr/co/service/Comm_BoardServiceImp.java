@@ -11,6 +11,7 @@ import kr.co.domain.Comm_BoardVO;
 import kr.co.domain.Comm_Criteria;
 import kr.co.mapper.Comm_BoardAttachMapper;
 import kr.co.mapper.Comm_BoardMapper;
+import kr.co.mapper.Comm_ReplyMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
@@ -26,6 +27,9 @@ public class Comm_BoardServiceImp implements Comm_BoardService {
 	
 	@Setter(onMethod_ = @Autowired)
 	private Comm_BoardAttachMapper cbam;
+	
+	@Setter(onMethod_ = @Autowired)
+	private Comm_ReplyMapper crm;
 	
 	@Transactional
 	@Override
@@ -49,15 +53,36 @@ public class Comm_BoardServiceImp implements Comm_BoardService {
 		return cbm.read(bno);
 	}
 
+	@Transactional
 	@Override
 	public boolean modify(Comm_BoardVO cb) {
 		log.info("modify.." + cb);
-		return cbm.update(cb)==1;
+//		return cbm.update(cb)==1;
+		cbam.deleteAll(cb.getBno());
+		
+		boolean modifyResult = false;
+		modifyResult = cbm.update(cb) == 1;
+		
+		int attachList = 0;
+		if(cb.getAttachList() != null) {
+			attachList = cb.getAttachList().size();
+		}
+		if(modifyResult && attachList > 0) {
+			cb.getAttachList().forEach(attach -> {
+				attach.setBno(cb.getBno());
+				cbam.insert(attach);
+			});
+		}
+		return modifyResult;
 	}
-
+	
+	@Transactional
 	@Override
 	public boolean remove(Long bno) {
 		log.info("remove.." + bno);
+		cbam.deleteAll(bno);
+		crm.deleteAll(bno);
+		
 		return (cbm.delete(bno))==1;
 	}
 

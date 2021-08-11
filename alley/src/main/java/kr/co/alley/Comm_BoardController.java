@@ -1,5 +1,8 @@
 package kr.co.alley;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -92,16 +95,20 @@ public class Comm_BoardController {
 			RedirectAttributes rttr, Comm_Criteria cri) {
 		
 		log.info("remove..." + bno);
+		List<Comm_BoardAttachVO> attachList = cbs.getAttachList(bno);
+		
 		if(cbs.remove(bno)) {
+			deleteFiles(attachList);
 			rttr.addFlashAttribute("result", "success");
 		}
 		
-		rttr.addAttribute("pageNum", cri.getPageNum());
-		rttr.addAttribute("amount", cri.getAmount());
-		rttr.addAttribute("type", cri.getType());
-		rttr.addAttribute("keyword", cri.getKeyword());
+//		rttr.addAttribute("pageNum", cri.getPageNum());
+//		rttr.addAttribute("amount", cri.getAmount());
+//		rttr.addAttribute("type", cri.getType());
+//		rttr.addAttribute("keyword", cri.getKeyword());
 
-		return "redirect:/commboard/list";
+//		return "redirect:/commboard/list";
+		return "redirect:/commboard/list" + cri.getListLink();
 	}
 	
 	@GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -109,6 +116,26 @@ public class Comm_BoardController {
 	public ResponseEntity<List<Comm_BoardAttachVO>> getAttachList(Long bno){
 		log.info("getAttachList: " + bno);
 		return new ResponseEntity<>(cbs.getAttachList(bno), HttpStatus.OK);
+	}
+	
+	private void deleteFiles(List<Comm_BoardAttachVO> attachList) {
+		if(attachList == null || attachList.size() == 0) {
+			return;
+		}
+		
+		log.info("delete attach file..");
+		log.info(attachList);
+		
+		attachList.forEach(attach -> {
+			try {
+				Path file
+				= Paths.get("c:\\upload\\" + attach.getUploadPath() + "\\" 
+				+ attach.getUuid() + "_" + attach.getFileName());
+				Files.deleteIfExists(file);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 }

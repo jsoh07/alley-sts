@@ -23,5 +23,7 @@ public interface Comm_ReplyMapper {
 	// 페이지 정보와 게시물 번호를 전달.
 	
 	public int getCountByBno(Long bno);
+	
+	public int deleteAll(Long bno);
 
 }

@@ -1,5 +1,7 @@
 package kr.co.domain;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,5 +31,16 @@ public class Comm_Criteria {
 		// 검색타입이 널이라면 비어있는 문자열 배열을 만들고,
 		// 그렇지 않다면, 검색타입을 한글자씩 잘라서 문자열 배열로 만듦.
 		
+	}
+	
+	public String getListLink() {
+		UriComponentsBuilder builder
+		= UriComponentsBuilder.fromPath("")
+		.queryParam("pageNum", this.pageNum)
+		.queryParam("amount", this.getAmount())
+		.queryParam("type", this.getType())
+		.queryParam("keyword", this.getKeyword());
+		
+		return builder.toUriString();
 	}
 }
