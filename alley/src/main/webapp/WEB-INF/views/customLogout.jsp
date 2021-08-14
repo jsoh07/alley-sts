@@ -6,10 +6,11 @@
 <!-- jstl fmt 쓸때 위와 같음. fmt : formatter 형식 맞춰서 표시 -->
 <%@ include file="includes/header.jsp"%>
 
+<div class="container" style="text-align: center;">
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<h1>로그아웃 처리</h1>
+			<h1>로그아웃 하시겠습니까?</h1>
 			<h2>${error }</h2>
 			<h2>${logout }</h2>
 			
@@ -28,6 +29,9 @@
 		</div>
 	</div>
 </div>
+</div>
+
+<%@ include file="includes/footer.jsp"%>
 
 <script>
 $(".btn-success").on("click",function(e){
@@ -43,5 +47,3 @@ $(".btn-success").on("click",function(e){
 	});	
 	</script>
 </c:if>
-
-<%@ include file="includes/footer.jsp"%>

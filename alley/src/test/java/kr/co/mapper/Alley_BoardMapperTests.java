@@ -24,7 +24,7 @@ public class Alley_BoardMapperTests {
 	
 	@Test
 	public void testRead() {
-		Alley_BoardVO ab = abm.read(10L);
+		Alley_BoardVO ab = abm.view(10L);
 		
 		log.info(ab);
 	}

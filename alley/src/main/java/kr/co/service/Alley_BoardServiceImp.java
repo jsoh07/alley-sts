@@ -20,16 +20,35 @@ public class Alley_BoardServiceImp implements Alley_BoardService {
 	@Setter(onMethod_= @Autowired)
 	private Alley_BoardMapper abm;
 
+
 	@Override
-	public Alley_BoardVO get(Long ano) {
-		log.info("get.." + ano);
-		return abm.read(ano);
+	public List<Alley_BoardVO> best1() {
+		
+		return abm.best1();
 	}
 
 	@Override
-	public List<Alley_BoardVO> getList() {
-		log.info("getList..");
-		return abm.getList();
+	public List<Alley_BoardVO> best2() {
+		
+		return abm.best2();
+	}
+
+	@Override
+	public List<Alley_BoardVO> best3() {
+		
+		return abm.best3();
+	}
+
+	@Override
+	public List<Alley_BoardVO> best4() {
+		
+		return abm.best4();
+	}
+
+	@Override
+	public Alley_BoardVO view(Long ano) {
+		
+		return abm.view(ano);
 	}
 
 }

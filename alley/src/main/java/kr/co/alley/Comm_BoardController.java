@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +47,8 @@ public class Comm_BoardController {
 		log.info("total: " + total);
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
 	}
-
+	
+	@PreAuthorize("isAuthenticated()")// 로그인한 사용자만 접근
 	@PostMapping("/register")
 	public String register(Comm_BoardVO cb, RedirectAttributes rttr) {
 		log.info("register : " + cb);
@@ -76,21 +78,23 @@ public class Comm_BoardController {
 
 	// post 요청으로 /modify 가 온다면, 아래 메소드 수행.
 	@PostMapping("/modify")
+	@PreAuthorize("principal.username==#cb.writer")// 글 작성자와 로그인 계정이 일치해야 수정 가능
 	public String modify(Comm_BoardVO cb, RedirectAttributes rttr, Comm_Criteria cri) {
 
 		log.info("modify:" + cb);
 		if (cbs.modify(cb)) {
 			rttr.addFlashAttribute("result", "success");
 		}
-		rttr.addAttribute("pageNum", cri.getPageNum());
-		rttr.addAttribute("amount", cri.getAmount());
-		rttr.addAttribute("type", cri.getType());
-		rttr.addAttribute("keyword", cri.getKeyword());
+//		rttr.addAttribute("pageNum", cri.getPageNum());
+//		rttr.addAttribute("amount", cri.getAmount());
+//		rttr.addAttribute("type", cri.getType());
+//		rttr.addAttribute("keyword", cri.getKeyword());
 
-		return "redirect:/commboard/list";
+		return "redirect:/commboard/list" + cri.getListLink();
 	}
 	
 	@PostMapping("/remove")
+	@PreAuthorize("principal.username==#writer")
 	public String remove(@RequestParam("bno") Long bno,
 			RedirectAttributes rttr, Comm_Criteria cri) {
 		
@@ -98,9 +102,11 @@ public class Comm_BoardController {
 		List<Comm_BoardAttachVO> attachList = cbs.getAttachList(bno);
 		
 		if(cbs.remove(bno)) {
+//			deleteFiles(attachList);
+//			rttr.addFlashAttribute("result", "success");
 			deleteFiles(attachList);
-			rttr.addFlashAttribute("result", "success");
 		}
+		log.info(cri.getListLink());
 		
 //		rttr.addAttribute("pageNum", cri.getPageNum());
 //		rttr.addAttribute("amount", cri.getAmount());

@@ -6,7 +6,13 @@ import kr.co.domain.Alley_BoardVO;
 
 public interface Alley_BoardMapper {
 	
-	public List<Alley_BoardVO> getList();
+	public List<Alley_BoardVO> best1();
 	
-	public Alley_BoardVO read(Long ano);
+	public List<Alley_BoardVO> best2();
+
+	public List<Alley_BoardVO> best3();
+	
+	public List<Alley_BoardVO> best4();
+	
+	public Alley_BoardVO view(Long ano);
 }

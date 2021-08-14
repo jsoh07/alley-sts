@@ -25,7 +25,9 @@
 					</div>
 
 					<div class="form-group">
-						<label>작성자</label> <input class="form-control" name="writer">
+						<label>작성자</label>
+						<input class="form-control" name="writer" 
+							value='<sec:authentication property="principal.username" />' readonly="readonly">
 					</div>
 
 					<button type="submit" class="btn btn-default">등록</button>
@@ -59,7 +61,8 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+<%@ include file="../includes/footer.jsp"%>
+
 <script>
 $(document).ready(function(e){
 	var formObj=$("form[role='form']");
@@ -112,6 +115,9 @@ $(document).ready(function(e){
 		return true;
 	}
 	
+	var csrfHeaderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
+	
 	$("input[type='file']").change(function(e){
 		var formData = new FormData();
 		var inputFile = $("input[name='uploadFile']");
@@ -128,6 +134,9 @@ $(document).ready(function(e){
 			url : '/uploadAjaxAction',
 			processData : false,
 			contentType : false,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
 			data : formData,
 			type : 'POST',
 			dataType : 'json',
@@ -178,6 +187,9 @@ $(document).ready(function(e){
 					fileName : targetFile,
 					type : type
 				},
+				beforeSend : function(xhr){
+					xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+				},
 				dataType : 'text',
 				type : 'POST',
 				success : function(result){
@@ -189,5 +201,3 @@ $(document).ready(function(e){
 	});
 });
 </script>
-
-<%@ include file="../includes/footer.jsp"%>

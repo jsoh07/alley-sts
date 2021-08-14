@@ -1,5 +1,6 @@
 package kr.co.alley;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.service.Alley_BoardService;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -16,13 +18,25 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class Alley_BoardController {
 	
+	@Setter(onMethod_= @Autowired)
 	private Alley_BoardService abs;
 	
-	@GetMapping("/get")
-	public void get(@RequestParam("ano") Long ano, Model model) {
+	@GetMapping("/main")
+	public void mainPageGET(Model model) {
+		log.info("메인페이지");
+		model.addAttribute("store1", abs.best1());
+		model.addAttribute("store2", abs.best2());
+		model.addAttribute("store3", abs.best3());
+		model.addAttribute("store4", abs.best4());
 		
-		log.info("/get");
-		model.addAttribute("ab", abs.get(ano));
 	}
+	
+	@GetMapping("/view")
+	public void alleyView(@RequestParam("ano") Long ano, Model model) {
+		
+		model.addAttribute("store",abs.view(ano));
+	}
+	
+	
 	
 }

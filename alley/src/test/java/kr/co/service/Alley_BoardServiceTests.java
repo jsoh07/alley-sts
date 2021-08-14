@@ -20,7 +20,7 @@ public class Alley_BoardServiceTests {
 	
 	@Test
 	public void testRead() {
-		Alley_BoardVO ab = abs.get(9L);
+		Alley_BoardVO ab = abs.view(9L);
 		log.info(ab);
 	}
 

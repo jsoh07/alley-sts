@@ -35,9 +35,17 @@
 					<label>작성자</label> <input class="form-control" name="writer"
 						value='<c:out value="${cb.writer }"/>' readonly="readonly">
 				</div>
-
-				<button data-oper="modify" class="btn btn-warning">수정</button>
-				<button data-oper="list" class="btn btn-info">목록</button>
+				
+				<sec:authentication property="principal" var="pinfo" />
+					<!-- 프린서펄 정보를 pinfo라는 이름으로 jsp에서 이용 -->
+					<sec:authorize access="isAuthenticated()">
+						<!-- 인증된 사용자만 허가 -->
+						<c:if test="${pinfo.username eq cb.writer }">
+							<!-- 인증되었으면서 작성자가 본인일 때, 수정 버튼 표시 -->
+							<button data-oper="modify" class="btn btn-warning">수정</button>
+						</c:if>
+					</sec:authorize>
+							<button data-oper="list" class="btn btn-info">목록</button>
 
 				<form id='operForm' action="/commboard/modify" method="get">
 					<input type='hidden' id='bno' name='bno' value="${cb.bno }" />
@@ -74,8 +82,12 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<i class="fa fa-comments fa-fw"></i>댓글 목록
+				
+				<sec:authorize access="isAuthenticated()">
 				<button id="addReplyBtn" class="btn btn-primary bts-xs float-right">
 					댓글 작성</button>
+				</sec:authorize>
+				
 			</div>
 			<br />
 			<div class="panel-body">
@@ -129,22 +141,32 @@
 <%@ include file="../includes/footer.jsp"%>
 
 <script type="text/javascript" src="/resources/js/reply.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
 <script>
 	$(document).ready(function(){
-		 var operForm = $("#operForm");/* 문서중 form 요소를 찾앙서 변수에 할당. */
+		 var csrfHeaderName="${_csrf.headerName}";
+		 var csrfTokenValue="${_csrf.token}";
+		 
+		 $(document).ajaxSend(function(e,xhr,options){
+			 xhr.setRequestHeader(csrfHeaderName,csrfTokenValue);
+		 });
+		 
+		 var operForm = $("#operForm");
 	      $('button[data-oper="modify"]').on("click",function(e){
 	         /* 버튼이 클릭된다면 아래 함수 수행, e라는 이벤트 객체를 전달하면서 */
 	         operForm.attr("action", "/commboard/modify").submit();
 	      });
-	      
+	
 	      $('button[data-oper="list"]').on("click",function(e){
 	         /* 버튼이 클릭된다면 아래 함수 수행, e라는 이벤트 객체를 전달하면서 */
 	         operForm.find("#bno").remove();
 	         operForm.attr("action", "/commboard/list").submit();
 	      });
 	      
-	      var bnoValue = '<c:out value = "${cb.bno}" />';	      
+	      var bnoValue = '<c:out value = "${cb.bno}" />';
+	      var replyer = null;
+	      <sec:authorize access = "isAuthenticated()">
+	      	replyer='${pinfo.username}';
+	      </sec:authorize>
 	     
 	      var modal = $("#myModal");
 	      //댓글용 모달
@@ -161,6 +183,9 @@
 	    	  //댓글쓰기 버튼 클릭시
 	    	  modal.find("input").val("");
 	    	  //모달창의 모든 입력창 초기화
+	    	  modal.find("input[name='replyer']").val(replyer);
+	    	  modal.find("input[name='replyer']").attr("readonly","readonly");
+	    	  
 	    	  modalInputReplyDate.closest("div").hide();
 	    	  //closest : 선택요소와 가장 가까운 요소를 지정
 	    	  modal.find("button[id != 'modalCloseBtn']").hide();
@@ -180,6 +205,11 @@
 	    			  replyer : modalInputReplyer.val(),
 	    			  bno : bnoValue
 	    	  }; //ajax로 전달한 reply 객체 선언 과 할당
+	    	  
+	    	  var reply_con = modalInputReply.val();
+	    	  	console.log("reply_con:" + reply_con);
+	    	  	if(reply_con == "")return;
+	    	  
 	    	  Comm_ReplyService.add(reply, function(result) {
 	    		  alert(result);
 	    		  modal.find("input").val("");//초기화
@@ -189,10 +219,26 @@
 	      });
 	      
 	      modalModBtn.on("click",function(e){
+	    	  var originalReplyer = modalInputReplyer.val();
+	    	  
 	    	  var reply = {
 	    			  rno : modal.data("rno"),
-	    			  reply : modalInputReply.val()
+	    			  reply : modalInputReply.val(),
+	    			  replyer : originalReplyer
 	    	  };
+	    	  
+	    	  if(!replyer){
+	    		  alert("로그인 후 수정 가능");
+	    		  modal.modal("hide");
+	    		  return;
+	    	  }
+	    	  
+	    	  if(replyer != originalReplyer){
+	    		  alert("자신이 작성한 댓글만 수정 가능");
+	    		  modal.modal("hide");
+	    		  return;
+	    	  }
+	    	  	    	  
 	    	  Comm_ReplyService.update(reply, function(result){
 	    		  alert(result);
 	    		  modal.modal("hide");
@@ -202,7 +248,22 @@
 	      
 	      modalRemoveBtn.on("click",function(e){
 	    	  var rno = modal.data("rno");
-	    	  Comm_ReplyService.remove(rno, function(result){
+	    	  
+	    	  var originalReplyer = modalInputReplyer.val();
+	    	  
+	    	  if(!replyer){
+	    		  alert("로그인 후 삭제 가능");
+	    		  modal.modal("hide");
+	    		  return;
+	    	  }
+	    	  
+	    	  if(replyer != originalReplyer){
+	    		  alert("자신이 작성한 댓글만 삭제 가능");
+	    		  modal.modal("hide");
+	    		  return;
+	    	  }
+	    	  
+	    	  Comm_ReplyService.remove(rno, originalReplyer, function(result){
 	    		  alert(result);
 	    		  modal.modal("hide");
 	    		  showList(-1);
@@ -215,7 +276,7 @@
 
 	    	  Comm_ReplyService.get(rno, function(reply){
 	    		  modalInputReply.val(reply.reply);
-	    		  modalInputReplyer.val(reply.replyer);
+	    		  modalInputReplyer.val(reply.replyer).attr("readonly","readonly");
 	    		  modalInputReplyDate.val(Comm_ReplyService.displayTime(reply.replyDate))
 	    		  			.attr("readonly","readonly");
 	    		  modal.data("rno",reply.rno);

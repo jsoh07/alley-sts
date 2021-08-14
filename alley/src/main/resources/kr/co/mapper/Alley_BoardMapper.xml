@@ -4,14 +4,35 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.mapper.Alley_BoardMapper">
 
-	<select id="getList" resultType="kr.co.domain.Alley_BoardVO">
+	<select id="best1" resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+			select mainimage,storename,address 
+			from alley_board where ano='22'
+		]]>	
+	</select>
+	
+	<select id="best2" resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+			select mainimage,storename,address 
+			from alley_board where ano='22'
+		]]>	
+	</select>
+	
+	<select id="best3" resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+			select mainimage,storename,address 
+			from alley_board where ano='22'
+		]]>	
+	</select>
+	
+	<select id="best4" resultType="kr.co.domain.Alley_BoardVO">
 		<![CDATA[
 			select mainimage,storename,address 
 			from alley_board where ano='22'
 		]]>	
 	</select>
 
-	<select id="read" resultType="kr.co.domain.Alley_BoardVO">
+	<select id="view" resultType="kr.co.domain.Alley_BoardVO">
 		select * from alley_board where ano=#{ano}
 	</select>
 
