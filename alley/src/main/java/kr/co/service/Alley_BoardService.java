@@ -12,7 +12,7 @@ public interface Alley_BoardService {
 	
 	public List<Alley_BoardVO> best3();
 	
-	public List<Alley_BoardVO> best4();
+	public List<Alley_BoardVO> getList();
 
 	public Alley_BoardVO view(Long ano);
 	

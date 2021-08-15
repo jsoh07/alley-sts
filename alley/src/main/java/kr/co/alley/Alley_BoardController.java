@@ -24,12 +24,19 @@ public class Alley_BoardController {
 	@GetMapping("/main")
 	public void mainPageGET(Model model) {
 		log.info("메인페이지");
-		model.addAttribute("store1", abs.best1());
-		model.addAttribute("store2", abs.best2());
-		model.addAttribute("store3", abs.best3());
-		model.addAttribute("store4", abs.best4());
+		model.addAttribute("best1", abs.best1());
+		model.addAttribute("best2", abs.best2());
+		model.addAttribute("best3", abs.best3());
 		
 	}
+	
+	@GetMapping("/alist")
+	public void alleyList(Model model) {
+		log.info("식당리스트");
+		model.addAttribute("alist", abs.getList());
+		
+	}
+	
 	
 	@GetMapping("/view")
 	public void alleyView(@RequestParam("ano") Long ano, Model model) {

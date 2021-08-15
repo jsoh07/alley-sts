@@ -40,15 +40,15 @@ public class Alley_BoardServiceImp implements Alley_BoardService {
 	}
 
 	@Override
-	public List<Alley_BoardVO> best4() {
-		
-		return abm.best4();
-	}
-
-	@Override
 	public Alley_BoardVO view(Long ano) {
 		
 		return abm.view(ano);
+	}
+
+	@Override
+	public List<Alley_BoardVO> getList() {
+		log.info("getList..");
+		return abm.getList();
 	}
 
 }
