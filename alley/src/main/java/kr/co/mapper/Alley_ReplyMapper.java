@@ -1,0 +1,24 @@
+package kr.co.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import kr.co.domain.Alley_ReplyVO;
+import kr.co.domain.Comm_Criteria;
+
+public interface Alley_ReplyMapper {
+	
+	public int insert(Alley_ReplyVO vo);
+	
+	public Alley_ReplyVO read(Long arno);
+	
+	public int delete(Long arno);
+	
+	public int update(Alley_ReplyVO reply);
+	
+	public List<Alley_ReplyVO> getListWithPaging(
+		@Param("cri") Comm_Criteria cri,
+		@Param("arno") Long arno);
+
+}

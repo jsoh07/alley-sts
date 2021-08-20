@@ -7,13 +7,13 @@
 <!doctype html>
 <%@ include file="../includes/header.jsp"%>
 
-<div class="py-5 bg-pink">
+<div class="py-5 bg-info">
 	<div class="container">
-		<h2 class="m-0 text-center">게시판</h2>
+		<h2 class="m-0 text-center">자유게시판</h2>
+		<div class="" align="right">
+			<button id="regBtn" style="color: green;">글 쓰기</button>
+		</div>
 	</div>
-	<div class="container" style="margin-left:93%;">
-		<button id="regBtn" style="color: green;">글 쓰기</button>
-	</div>	
 </div>
 
 <!-- table -->

@@ -82,14 +82,21 @@ height: 130px;
 			<!-- searchbar -->
 			<nav class="navbar navbar-light bg-light" style="padding-right: 3%;">
 				<div class="container-fluid">
-					<form class="d-flex">
-						<input class="form-control me-2" type="search"
+					<form class="d-flex" id="search-Form" action="/alleyboard/search" method="get">
+						<select type="hidden" name="type" style="display:none">
+							<option type="hidden" name="type" value="SAT" ${pageMaker.cri.type eq "SAT"?"selected":"" } />
+						</select>
+						<input class="form-control me-2" type="search" name="keyword"
+							value="${pageMaker.cri.keyword }"
 							placeholder="지역 또는 식당을 검색해주세요.." aria-label="Search"
-							style="width: 400px; height: 50px; font-size: 20px;">
+							style="width: 400px; height: 50px; font-size: 20px;" />
+						<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }" />
+						<input type="hidden" name="amount" value="${pageMaker.cri.amount }" />
 						<button class="btn btn-outline-success" type="submit">Search</button>
 					</form>
 				</div>
 			</nav>
+			
 			<!-- nav menu -->
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -103,9 +110,10 @@ height: 130px;
 							<sec:authentication property="principal.username" var="userid"/>
 							<li>안녕하세요!&nbsp; ${userid } 님</li>
 							<li>/</li>
-							<li><a class="nav-link" href="/customLogout">
-							<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-							로그아웃</a></li>
+							<li>
+							<a class="nav-link" href="/customLogout">
+							로그아웃</a>
+							</li>
 							<li>마이페이지</li>
 				</sec:authorize>
 				<sec:authorize access="isAnonymous()">
@@ -116,3 +124,24 @@ height: 130px;
 			</div>
 		</div>
 	</nav>
+	
+<script>
+$(document).ready(function(){
+				
+	var alley_searchForm = $("#search-Form");
+				
+		$("#search-Form button").on("click",function(e){
+					
+		if(!alley_searchForm.find("input[name='keyword']").val()){
+			alert("검색어를 입력해주세요");
+						
+			return false;
+		}
+					
+		alley_searchForm.find("input[name='pageNum']").val(1);
+		alley_searchForm.find("input[name='amount']").val(16);
+		e.preventDefault();
+		alley_searchForm.submit();
+	});
+});
+</script>

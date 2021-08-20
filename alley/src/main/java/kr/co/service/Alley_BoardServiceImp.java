@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.domain.Alley_BoardVO;
+import kr.co.domain.Comm_Criteria;
 import kr.co.mapper.Alley_BoardMapper;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -38,17 +39,34 @@ public class Alley_BoardServiceImp implements Alley_BoardService {
 		
 		return abm.best3();
 	}
-
+	
+	//식당 상세보기
 	@Override
 	public Alley_BoardVO view(Long ano) {
 		
 		return abm.view(ano);
 	}
-
+	
+	//식당 전체보기
+		@Override
+		public List<Alley_BoardVO> getList(Comm_Criteria cri) {
+			log.info("getList..");
+			return abm.getListWithPaging(cri);
+		}
+	
+	
+	//식당 총 갯수
 	@Override
-	public List<Alley_BoardVO> getList() {
-		log.info("getList..");
-		return abm.getList();
+	public int getTotal(Comm_Criteria cri) {
+		
+		return abm.getTotal(cri);
+	}
+	
+	//식당 검색보기
+	@Override
+	public List<Alley_BoardVO> searchList(Comm_Criteria cri) {
+		
+		return abm.searchList(cri);
 	}
 
 }

@@ -17,7 +17,7 @@ public class Comm_Criteria {
 	private String keyword;// 검색어. 예) 새로
 	
 	public Comm_Criteria() {
-		this(1,10);// 아래쪽 전달값 2개 생성자 호출.
+		this(1,8);// 아래쪽 전달값 2개 생성자 호출.
 	}
 	
 	public Comm_Criteria(int pageNum, int amount) {

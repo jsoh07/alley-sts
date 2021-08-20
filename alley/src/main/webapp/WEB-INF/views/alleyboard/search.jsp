@@ -6,7 +6,7 @@
 
 <div class="py-5 bg-warning">
 	<div class="container">
-		<h2 class="m-0 text-center">'백종원의 골목식당'<br>전체 목록</h2>
+		<h2 class="m-0 text-center">"${pageMaker.cri.keyword }"에 대한 검색결과</h2>
 	</div>
 </div>
 
@@ -67,7 +67,7 @@
 	</ul>
 </nav>
 
-<form id="actionForm" action="/alleyboard/alist" method="get">
+<form id="actionForm" action="/alleyboard/search" method="get">
 	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 	<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
 </form>
