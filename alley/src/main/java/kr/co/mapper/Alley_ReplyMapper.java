@@ -9,16 +9,16 @@ import kr.co.domain.Comm_Criteria;
 
 public interface Alley_ReplyMapper {
 	
-	public int insert(Alley_ReplyVO vo);
+	public int insert(Alley_ReplyVO vo); 
 	
 	public Alley_ReplyVO read(Long arno);
 	
-	public int delete(Long arno);
+	public int delete(Long arno); 
 	
-	public int update(Alley_ReplyVO reply);
+	public int update(Alley_ReplyVO reply); 
 	
 	public List<Alley_ReplyVO> getListWithPaging(
 		@Param("cri") Comm_Criteria cri,
-		@Param("arno") Long arno);
+		@Param("ano") Long ano);
 
 }

@@ -4,6 +4,7 @@
 
 <%@ include file="../includes/header.jsp"%>
 
+
 <!-- Page content-->
 <div class="container mt-5">
 	<div class="row">
@@ -74,19 +75,43 @@
 				</section>
 			</article>
 			
-			<!-- 댓글 작성 -->
+			<!-- 리뷰 댓글작성 -->
 			<section class="mb-5">
 				<div class="card bg-light">
 					<div class="card-body">
-						<!-- Comment form-->
+					<div class="panel-heading">
+					<h4>* 리뷰 *</h4>
+						<!-- 리뷰 댓글작성 폼 -->
 						<form class="mb-4">
-							<textarea class="form-control" rows="3"
+							
+							
+							<textarea class="form-control" rows="3" name="reply" id="reply"
 								placeholder="솔직한 후기를 남겨주세요..."></textarea>
+												
 						</form>
+					</div>
+					
+					<sec:authorize access='isAuthenticated()'>
+						<input type="hidden" value="${alist.ano}" name="ano" id="ano">
+						<input type="hidden" value="${userid}" name="userid" id="userid">
+						<input type="hidden" value="${replyDate }" name="replyDate" id="replyDate">
 						<div class="" align="right">
-							<button type="button" class="btn btn-warning btn-sm">
+							<button id="addReplyBtn" type="button" class="btn btn-warning btn-sm">
 							댓글등록</button>
 						</div>
+					</sec:authorize>
+					
+						<!-- 리뷰 댓글목록 -->
+                    	<div class="d-flex">
+                        	<div class="ms-3">
+                        		<div class="panel-body">
+                            		<ul class="chat">
+                                		<li>굿굿</li>
+                                	</ul>
+                                </div>
+                                <div class="panel-footer"></div>
+                            </div>
+                    	</div>
 					</div>
 				</div>
 			</section>
@@ -94,5 +119,80 @@
 	</div>
 </div>
 
-
 <%@ include file="../includes/footer.jsp"%>
+
+<script type="text/javascript" src="/resources/js/alley_reply.js"></script>
+<script>
+$(document).ready(function(){
+	
+	var csrfHeaderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
+	
+	$(document).ajaxSend(function(e,xhr,options) {
+		xhr.setRequestHeader(csrfHeaderName,csrfTokenValue);
+	});
+	
+	var addReplyBtn = $("#addReplyBtn");
+	var Reply = $("textarea[name='reply']");
+	var Replyer = $("input[name='userid']");
+	var anoValue = '<c:out value = "${alist.ano}" />';
+	var ReplyDate = $("input[name='replyDate']");
+	
+	addReplyBtn.on("click", function(e){
+		
+		
+			
+		var reply = {
+				
+			reply : Reply.val(),
+			replyer : Replyer.val(),
+			ano : anoValue
+			
+		};
+		
+		Alley_ReplyService.add(reply, function(result){
+			alert(result);
+		});
+		
+	});
+	
+	var replyUL = $(".chat");
+    // reply Unorderd List
+    
+    function showList(page){
+  	  Alley_ReplyService
+  	  			.getList(
+  	  					{
+  	  						ano : anoValue,
+  	  						page : page || 1
+  	  					},
+  	  					function(list){
+  	  						var str = "";
+  	  						if(list == null
+  	  								|| list.length == 0){
+  	  							replyUL.html("");
+  	  							return;
+  	  						}
+  	  						for(var i = 0, len = list.length || 0; i < len; i++){
+	  	  						str += "<li class='left ";
+	  							str+="clearfix' data-arno='";
+	  							str+=list[i].arno+"'>";
+	  							str += "<div><div class='header' ";
+	  							str+="><strong class='";
+	  							str+="primary-font'>";
+	  							str += list[i].replyer+ "</strong>";
+	  							str += "<small class='float-sm-right '>";
+	  							str += list[i].replyDate+ "</small></div>";
+	  							str += "<p>"+ list[i].reply;
+	  							str += "</p></div></li>";
+  	  						}
+  	  						replyUL.html(str);
+  	  					});
+    }
+  	showList(1);
+
+});
+	
+
+</script>
+

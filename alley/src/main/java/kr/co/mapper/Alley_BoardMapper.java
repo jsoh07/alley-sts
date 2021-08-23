@@ -20,8 +20,6 @@ public interface Alley_BoardMapper {
 	
 	public List<Alley_BoardVO> searchList(Comm_Criteria cri);
 	
-	public List<Alley_BoardVO> localList(Comm_Criteria cri);
-	
 	public Alley_BoardVO view(Long ano);
 	
 	

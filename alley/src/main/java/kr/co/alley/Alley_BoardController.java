@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.co.domain.Comm_Criteria;
 import kr.co.domain.PageDTO;
 import kr.co.service.Alley_BoardService;
+import kr.co.service.Alley_ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -22,6 +23,9 @@ public class Alley_BoardController {
 	
 	@Setter(onMethod_= @Autowired)
 	private Alley_BoardService abs;
+	
+	@Setter(onMethod_= @Autowired)
+	private Alley_ReplyService ars;
 	
 	//메인페이지
 	@GetMapping("/main")
@@ -62,7 +66,5 @@ public class Alley_BoardController {
 		model.addAttribute("alist",abs.view(ano));
 		
 	}
-	
-	
-	
+		
 }

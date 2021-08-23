@@ -2,6 +2,7 @@ package kr.co.domain;
 
 import java.util.Date;
 
+
 import lombok.Data;
 
 @Data

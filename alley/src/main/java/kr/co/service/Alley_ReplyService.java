@@ -13,12 +13,11 @@ public interface Alley_ReplyService {
 	
 	public Alley_ReplyVO get(Long arno);
 	
-	public int remove(Long arno);
+	public int remove(Long arno); 
 	
-	public int modify(Alley_ReplyVO reply);
+	public int modify(Alley_ReplyVO reply); 
 	
-	public List<Alley_ReplyVO> getList(
-		@Param("cri") Comm_Criteria cri,
-		@Param("ano") Long ano);
+	public List<Alley_ReplyVO> getList(@Param("cri") Comm_Criteria cri, @Param("ano") Long ano);
+
 
 }
