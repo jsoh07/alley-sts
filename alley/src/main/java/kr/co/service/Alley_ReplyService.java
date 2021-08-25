@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import kr.co.domain.Alley_ReplyPageDTO;
 import kr.co.domain.Alley_ReplyVO;
 import kr.co.domain.Comm_Criteria;
 
@@ -19,5 +20,5 @@ public interface Alley_ReplyService {
 	
 	public List<Alley_ReplyVO> getList(@Param("cri") Comm_Criteria cri, @Param("ano") Long ano);
 
-
+	public Alley_ReplyPageDTO getListPage(Comm_Criteria cri, Long ano);
 }

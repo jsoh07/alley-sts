@@ -1,10 +1,9 @@
 package kr.co.alley;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.domain.Alley_ReplyPageDTO;
 import kr.co.domain.Alley_ReplyVO;
 import kr.co.domain.Comm_Criteria;
 import kr.co.service.Alley_ReplyService;
@@ -25,6 +25,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @AllArgsConstructor
 public class Alley_ReplyController {
+	
 	private Alley_ReplyService ars;
 
 	// 리뷰 댓글작성
@@ -48,13 +49,13 @@ public class Alley_ReplyController {
 	// 리뷰 댓글목록
 	@GetMapping(value = "/pages/{ano}/{page}", // 덧글에 대한 페이징
 			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<List<Alley_ReplyVO>> getList(@PathVariable("page") int page, @PathVariable("ano") Long ano) {
+	public ResponseEntity<Alley_ReplyPageDTO> getList(@PathVariable("page") int page, @PathVariable("ano") Long ano) {
 		// @PathVariable : url 로 넘겨받은 값 이용.
 		log.info("getList..");
 		Comm_Criteria cri = new Comm_Criteria(page, 10);
 		log.info(cri);
 
-		return new ResponseEntity<>(ars.getList(cri, ano), HttpStatus.OK);
+		return new ResponseEntity<>(ars.getListPage(cri, ano), HttpStatus.OK);
 		// T<List<ReplyVO>> t = new T<>();
 		// 댓글 목록을 출력하고, 정상 처리 상태를 리턴.
 	}

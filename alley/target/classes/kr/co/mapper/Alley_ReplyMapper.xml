@@ -33,8 +33,22 @@
 	<select id="getListWithPaging"
 		resultType="kr.co.domain.Alley_ReplyVO">
 		select arno, ano, reply, replyer, replydate, updatedate
-		from alley_board_reply where ano=#{ano}
-		order by arno asc
+		from 
+		
+		<![CDATA[
+		(select /*+INDEX(alley_board_reply idx_alley_reply) */
+		rownum rn, arno, ano, reply, replyer, replyDate, updatedate
+		from alley_board_reply
+		where ano=#{ano}
+		and arno > 0
+		and rownum <= #{cri.pageNum} * #{cri.amount}
+		) where rn > (#{cri.pageNum}-1)* #{cri.amount}
+		]]>
+	</select>
+	
+	<select id="getCountByano" resultType="int">
+		select count(arno) from
+		alley_board_reply where ano=#{ano}
 	</select>
 	
 </mapper>

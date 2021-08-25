@@ -20,5 +20,7 @@ public interface Alley_ReplyMapper {
 	public List<Alley_ReplyVO> getListWithPaging(
 		@Param("cri") Comm_Criteria cri,
 		@Param("ano") Long ano);
+	
+	public int getCountByano(Long ano);
 
 }

@@ -18,6 +18,7 @@ console.log("Reply module..55");
              if(callback){
                 callback(result);
              }
+             $("#reply").val("");
           },
           error : function(xhr, status, er){
              if(error){
@@ -38,7 +39,7 @@ console.log("Reply module..55");
 		$.getJSON("/alleyreplies/pages/" + ano + "/" + page + ".json",
 				function(data) {
 				if (callback) {
-					callback(data);
+					callback(data.replyCnt, data.list);
 				}
 			}).fail(function(xhr, status, err) {
 			//xhr : xml http request 의 약자
@@ -108,12 +109,10 @@ console.log("Reply module..55");
 		}
 		
 		//댓글 삭제
-		function remove(arno, replyer, callback, error){
+		function remove(arno, callback, error){
 			$.ajax({
 				type : 'delete',
 				url : '/alleyreplies/' + arno,
-				data : JSON.stringify({arno:arno,replyer:replyer}),
-					contentType : "application/json; charset=utf-8",
 				success : function(deleteResult, status, xhr){
 					if(callback){
 						callback(deleteResult);

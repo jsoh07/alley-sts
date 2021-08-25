@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.domain.Alley_ReplyPageDTO;
 import kr.co.domain.Alley_ReplyVO;
 import kr.co.domain.Comm_Criteria;
 import kr.co.mapper.Alley_ReplyMapper;
@@ -48,6 +49,12 @@ public class Alley_ReplyServiceImp implements Alley_ReplyService {
 	public List<Alley_ReplyVO> getList(Comm_Criteria cri, Long ano) {
 		log.info("get reply list" + ano);
 		return arm.getListWithPaging(cri, ano);
+	}
+
+	@Override
+	public Alley_ReplyPageDTO getListPage(Comm_Criteria cri, Long ano) {
+		return new Alley_ReplyPageDTO(arm.getCountByano(ano),
+				arm.getListWithPaging(cri, ano));
 	}
 	
 }
