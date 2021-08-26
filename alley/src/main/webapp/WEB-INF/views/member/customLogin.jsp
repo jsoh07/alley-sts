@@ -4,7 +4,7 @@
 <!-- jstl core 쓸때 태그에 c 로 표시. -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!-- jstl fmt 쓸때 위와 같음. fmt : formatter 형식 맞춰서 표시 -->
-<%@ include file="includes/header.jsp"%>
+<%@ include file="../includes/header.jsp"%>
 
 <div class="container">
 <div class="row">
@@ -14,13 +14,13 @@
 			<h2>${error }</h2>
 			<h2>${logout }</h2>
 			
-			<form method="post" action="/login">
+			<form method="post" action="/member/customLogin">
 				<div class="form-group" style="padding-left: 35%;">
-					<input type="text" name="username" placeholder="userid" class="form-control"
+					<input type="text" name="userid" placeholder="userid" class="form-control"
 						style="width: 400px;" >
 				</div>
 				<div class="form-group" style="padding-left: 35%;">
-					<input type="password" name="password" placeholder="password" class="form-control"
+					<input type="password" name="userpw" placeholder="password" class="form-control"
 						style="width: 400px;">	
 				</div>
 				<div class="form-group">
@@ -38,5 +38,5 @@
 </div>
 </div>
 
-<%@ include file="includes/footer.jsp"%>
+<%@ include file="../includes/footer.jsp"%>
 
