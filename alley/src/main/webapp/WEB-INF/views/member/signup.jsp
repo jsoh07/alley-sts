@@ -10,8 +10,8 @@
 	<!--start login Area-->
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-6">
-				<div class="login">
+			<div class="col-lg-12">
+				<div class="panel-panel-default" style="text-align: center;">
 					<form id="signup-form" method="post" action="/member/signup">
 						<input type="hidden" name="${_csrf.parameterName }"
 							value="${_csrf.token}">
@@ -26,7 +26,7 @@
 						<div class="text_fail" id="id-danger">사용중인 ID입니다.</div>
 						<div class="text_fail" id="id-error">5자리 이상 사용 가능합니다.</div>
 						<div class="text_success" id="id-success">사용 가능한 ID입니다.</div>
-
+						<br />
 						
 						<label>비밀번호<span>*</span></label> 
 						<input type="password" id="userpw" name="userpw"
@@ -34,18 +34,18 @@
 						<input type="hidden" id="pwCheckVal" value="N" />
 						<div class="text_fail" id="pw-error">비밀번호는 영문,숫자,특수문자를 포함한
 							8자리 이상 작성.</div>
-
+						<br />
 						
 						<label>비밀번호확인<span>*</span></label> 
-						<input type="password" id="userpw_conf" name="userpw_conf" placeholder="한 번더 입력해 주세요." required/> 
+						<input type="password" id="userpw_conf" name="userpw_conf" placeholder="한번 더 입력해 주세요." required/> 
 						<input type="hidden" id="pwcCheckVal" value="N" />
 						<div class="text_fail" id="pw-danger">비밀번호가 일치하지 않습니다.</div>
 						<div class="text_success" id="pw-success">비밀번호가 일치합니다.</div>
-
+						<br />
 						
 						<label>성함<span>*</span></label> 
 						<input type="text" id="userName" name="userName" required/>
-
+						<br />
 						
 						<label>이메일<span>*</span></label> 
 						<input type="text" id="userEmail" name="userEmail" required/> 
@@ -53,7 +53,11 @@
 						<div class="text_fail" id="em-danger">등록된 E-mail입니다.</div>
 						<div class="text_fail" id="em-error">E-mail 형식에 맞도록 작성하여주시기 바랍니다.</div>
 						<div class="text_success" id="em-success">사용가능한 E-mail 입니다.</div>
-
+						<button class="check-button" id="emCheck-button">본인인증</button>
+						
+						<input type="text" class="compare" placeholder="인증번호 입력" style="display:none" />
+						<button class="check-button" id="emNumCheck-button">인증번호 확인</button>
+						<br />
 						
 						<label>핸드폰번호<span>*</span></label> 
 						<input type="text" id="userPhone" name="userPhone" required /> 
@@ -61,17 +65,21 @@
 						<div class="text_fail" id="ph-danger">등록된 핸드폰 번호입니다.</div>
 						<div class="text_fail" id="ph-error">010을 포함한 11자리의 숫자로 입력해주세요.</div>
 						<div class="text_success" id="ph-success">사용가능한 핸드폰 번호 입니다.</div>
-
+						<br />
 						
 						<label>주소<span></span></label> 
 						<input type="text" id="userAddr1" name="userAddr1" 
 							placeholder="우편번호" required readonly="readonly" />
 						<button class="check-button" id="execDaumPostcode">우편번호 찾기</button>
+						<br />
 						<input type="text" id="userAddr2" name="userAddr2"
 							placeholder="주소" required readonly="readonly" /> 
 						<input type="text" id="userAddr3" name="userAddr3" placeholder="상세주소"
-							required readonly="readonly" /> 
-						<input class="signup-button" type="submit" value="회원가입" />
+							required readonly="readonly" />
+						<br />
+						<div> 
+							<input class="signup-button" type="submit" value="회원가입" />
+						</div>					
 					</form>
 				</div>
 			</div>
@@ -233,14 +241,14 @@ $(document).ready(function() {
 							$("#em-danger").show();
 							$("#em-error").hide();
 							$("#em-success").hide();
-							//$("#CheckEmail-button").hide(); 
+							$("#emCheck-button").hide(); 
 							document.getElementById("emCheckVal").value = 'N';
 						}
 						else if (data == 0) {
 							$("#em-danger").hide();
 							$("#em-error").hide();
 							$("#em-success").show();
-							//$("#emCheck-button").show(); 
+							$("#emCheck-button").show(); 
 							document.getElementById("emCheckVal").value = 'Y';
 						}
 					}
@@ -250,15 +258,51 @@ $(document).ready(function() {
 				$("#em-danger").hide();
 				$("#em-error").show();
 				$("#em-success").hide();
-				//$("#emCheck-button").hide(); 
+				$("#emCheck-button").hide(); 
 				document.getElementById("emCheckVal").value = 'N';
 			}
-		
-		
 		}
-
 	});
+	
 	/* 이메일 인증  */
+	$("#emNumCheck-button").hide();
+	$("#emCheck-button").hide();
+	var key = "";
+	var isCertification = false;
+	
+	$("#emCheck-button").on("click",function(e){
+		e.preventDefault();
+		$.ajax({
+			type : 'post',
+			url : "/member/emailAuth",
+			dataType : 'json',
+			async : false,
+			data : {
+				"userEmail": $("#userEmail").val()
+			},
+			success : function(data){
+				key = data.key;
+			}		
+		});
+		
+		alert("작성하신 E-mail로 인증번호를 발송했습니다.");
+		$(".compare").css("display", "block");
+		$("#emNumCheck-button").show();
+	});
+	
+	$("#emNumCheck-button").on("click",function(e){
+		e.preventDefault();
+		
+		if($(".compare").val() == key){
+			alert("인증완료");
+			isCertification = true;
+			console.log(isCertification);
+		}else{
+			alert("인증번호가 일치하지 않습니다.");
+			$(".compare").val("");
+			isCertification = false;
+		}		
+	});
 	
 	/* 핸드폰 중복  */
 	$("#ph-danger").hide();
@@ -353,20 +397,17 @@ $(document).ready(function() {
 			return false;
 		}
 		
-		/* console.log(isCertifiaction);
+		console.log(isCertification);
 		
 		//이메일 인증 여부
-		if(isCertifiaction == true) {
+		if(isCertification == true) {
 			sendForm.submit();
 		} 
 		else {
 			alert("메일 인증이 진행되지 않았습니다.");
 			return false;
-		} */
-		
-		sendForm.submit();
+		}		
 	});
-	
 });
 
 /*주소 처리를 위해 다음주소 연동

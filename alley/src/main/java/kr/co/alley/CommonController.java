@@ -1,10 +1,18 @@
 package kr.co.alley;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -96,6 +104,43 @@ public class CommonController {
 	public int CheckPhone(General_MemberVO vo) throws Exception {
 		int result = gms.CheckPhone(vo);
 		return result;
+	}
+	
+	// 메일 전송 모듈
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	@ResponseBody
+	@PostMapping("/emailAuth")
+	public Map<String, Object> SendMail(String mail, HttpSession session, General_MemberVO vo){
+		
+		Map<String, Object>map = new HashMap<>();
+		String email = vo.getUserEmail();
+		String authNum = RandomStringUtils.randomAlphanumeric(10);
+		
+		String setfrom = "ohjs721@gmail.com";
+		String tomail = email;
+		String title = "먹거리 회원가입을 위한 인증번호 전송";
+		String content = "먹거리 회원가입을 해주셔서 감사합니다. 회원가입 인증번호 [ " + authNum + " ] 입니다.";
+		
+		try {
+			
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+			
+			messageHelper.setFrom(setfrom);
+			messageHelper.setTo(tomail);
+			messageHelper.setSubject(title);
+			messageHelper.setText(content);
+			
+			mailSender.send(message);
+			map.put("key",authNum);
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return map;		
 	}
 
 }
